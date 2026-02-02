@@ -31,7 +31,7 @@ DB_PATH = Path("/usr/share/GeoIP/GeoLite2-Country.mmdb")
 DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 DB_MAX_AGE = timedelta(days=7)
 
-DEFAULT_OUTPUT_PATH = Path("/etc/nginx/maxmind_geoip_allowlist.conf")
+DEFAULT_OUTPUT_PATH = Path("/etc/nginx/ipallowlist_maxmind_geoip.conf")
 
 REQUESTS_TIMEOUT = 10
 
