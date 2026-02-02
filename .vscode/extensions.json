@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "esbenp.prettier-vscode",
+        "samuelcolvin.jinjahtml",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "matangover.mypy",
+        "charliermarsh.ruff",
+        "tamasfe.even-better-toml"
+    ]
+}

@@ -1,0 +1,1 @@
+"""GeoIP Nginx allowlist generator."""
