@@ -89,6 +89,9 @@ def _write_allowlist_file(output_path: Path, ip_ranges: list[str]) -> None:
         for ip_range in ip_ranges:
             f.write(f"allow {ip_range};\n")
 
+    perms = 0o644
+    console.print(f"Setting permissions to {oct(perms)}...")
+    output_path.chmod(perms)
 
 def main() -> None:
     """Main entry point for the script."""
