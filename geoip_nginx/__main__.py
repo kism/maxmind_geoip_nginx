@@ -81,6 +81,7 @@ def get_country_ip_ranges(country_codes: list[str]) -> list[str]:
 
 def _write_allowlist_file(output_path: Path, ip_ranges: list[str]) -> None:
     """Write the allowlist file for Nginx."""
+    console.print(f"Writing allowlist to {output_path}...")
     with output_path.open("w") as f:
         for ip_range in ip_ranges:
             f.write(f"allow {ip_range};\n")
