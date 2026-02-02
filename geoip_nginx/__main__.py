@@ -30,6 +30,9 @@ DOWNLOAD_URL = "https://download.maxmind.com/geoip/databases/GeoLite2-Country/do
 DB_PATH = Path("/usr/share/GeoIP/GeoLite2-Country.mmdb")
 DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 DB_MAX_AGE = timedelta(days=7)
+
+DEFAULT_OUTPUT_PATH = Path("/etc/nginx/maxmind_geoip_allowlist.conf")
+
 REQUESTS_TIMEOUT = 10
 
 
@@ -93,15 +96,13 @@ def main() -> None:
     console.log(f"Maxmind License Key: [bold green]{MAXMIND_LICENSE_KEY[:4] + '*' * (len(MAXMIND_LICENSE_KEY) - 4)}[/]")
 
     parser = argparse.ArgumentParser(description="Generate GeoIP allowlist for Nginx.")
-    parser.add_argument(
-        "--output", type=Path, help="Path to save the nginx conf file", default=Path("/etc/nginx/geoip_allowlist.conf")
-    )
+    parser.add_argument("--output", type=Path, help="Path to save the nginx conf file", default=DEFAULT_OUTPUT_PATH)
     parser.add_argument("--countries", nargs="+", help="List of country codes to allow", required=True)
     args = parser.parse_args()
 
     output_path: Path = args.output
     countries: list[str] = args.countries
-    del args # Stop me using args directly
+    del args  # Stop me using args directly
 
     console.log(f"Output file: [bold green]{output_path}[/]")
     console.log(f"Allowed countries: [bold green]{', '.join(countries)}[/]")
