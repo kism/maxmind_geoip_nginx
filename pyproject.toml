@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["mypy>=1.19.1", "ruff>=0.14.14", "ty>=0.0.14"]
+dev = ["mypy>=1.19.1", "ruff>=0.14.14", "ty>=0.0.14", "types-requests"]
 
 
 [tool.ruff]

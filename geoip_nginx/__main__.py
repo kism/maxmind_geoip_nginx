@@ -56,10 +56,11 @@ def download_geolite2_db() -> bool:
     return False
 
 
-def get_country_ip_ranges(country_code: str) -> list[str]:
+def get_country_ip_ranges(country_codes: list[str]) -> list[str]:
     """Get IP ranges for a given country code from the GeoLite2 database."""
-    if len(country_code) != COUNTRY_CODE_LENGTH:
-        console.log(f"[bold red]Invalid country code: {country_code}. Must be a 2-letter ISO code.[/]")
+    for country_code in country_codes:
+        if len(country_code) != COUNTRY_CODE_LENGTH:
+            console.log(f"[bold red]Invalid country code: {country_code}. Must be a 2-letter ISO code.[/]")
 
     ranges = []
     with maxminddb.open_database(DB_PATH) as reader:
@@ -72,7 +73,7 @@ def get_country_ip_ranges(country_code: str) -> list[str]:
             if not country:
                 continue
 
-            if country.get("iso_code") == country_code.upper():
+            if country.get("iso_code") in [country_code.upper() for country_code in country_codes]:
                 ranges.append(str(network))
 
     return ranges
@@ -97,22 +98,22 @@ def main() -> None:
     parser.add_argument("--countries", nargs="+", help="List of country codes to allow", required=True)
     args = parser.parse_args()
 
-    console.log(f"Output file: [bold green]{args.output}[/]")
-    console.log(f"Allowed countries: [bold green]{', '.join(args.countries)}[/]")
+    output_path: Path = args.output
+    countries: list[str] = args.countries
+    del args # Stop me using args directly
 
+    console.log(f"Output file: [bold green]{output_path}[/]")
+    console.log(f"Allowed countries: [bold green]{', '.join(countries)}[/]")
     if not download_geolite2_db():
         console.log("[bold red]Failed to download GeoLite2 database. Exiting.[/]")
         sys.exit(1)
 
     all_ip_ranges = []
-    for country in args.countries:
-        console.log(f"Fetching IP ranges for country: [bold green]{country}[/]")
-        ip_ranges = get_country_ip_ranges(country)
-        console.log(f"Found [bold green]{len(ip_ranges)}[/] IP ranges for country: [bold green]{country}[/]")
-        all_ip_ranges.extend(ip_ranges)
+    ip_ranges = get_country_ip_ranges(countries)
+    all_ip_ranges.extend(ip_ranges)
 
-    all_ip_ranges = merge_ip_ranges(all_ip_ranges)
-    _write_allowlist_file(args.output, all_ip_ranges)
+    # all_ip_ranges = merge_ip_ranges(all_ip_ranges)
+    _write_allowlist_file(output_path, all_ip_ranges)
 
 
 if __name__ == "__main__":
