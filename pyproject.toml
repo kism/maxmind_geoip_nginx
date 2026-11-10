@@ -6,21 +6,30 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "dotenv>=0.9.9",
-    "geoip2>=5.2.0",
-    "jinja2>=3.1.6",
-    "maxminddb>=3.0.0",
-    "requests>=2.32.5",
-    "rich>=14.3.2",
-    "tqdm>=4.67.2",
+    "httpx>=0.28.1",
+    "maxminddb>=3.2.0",
+    "rich>=15.0.0",
 ]
 
+[project.scripts]
+geoip-nginx = "geoip_nginx.__main__:main"
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""
+
 [dependency-groups]
-dev = ["mypy>=1.19.1", "ruff>=0.14.14", "ty>=0.0.14", "types-requests"]
+dev = [
+    "ruff>=0.17.4",
+    "ty>=0.0.100",
+]
 
 
 [tool.ruff]
 cache-dir = "~/.cache/ruff"
-target-version = "py312"
 line-length = 120
 
 [tool.ruff.lint]
@@ -29,6 +38,7 @@ ignore = [
     # Modules
     "DJ",  # KG Django not required
     "DTZ", # KG no need to specify timezone for time objects
+    "CPY", # KG no copyright headers
 
     # Specific rules
     "TD002",  # KG Verbose TODO, only I work on this project
@@ -81,19 +91,3 @@ testpaths = ["tests"]
 [tool.coverage.html]
 show_contexts = true
 
-[tool.mypy]
-files = ["my_cool_app", "tests"]
-show_error_codes = true
-strict = true
-enable_error_code = [
-    "ignore-without-code",
-    "redundant-expr",
-    "truthy-bool",
-    "type-arg",
-    "unused-awaitable",
-    "possibly-undefined",
-    "redundant-self",
-]
-warn_unreachable = true
-warn_redundant_casts = true
-warn_no_return = true
