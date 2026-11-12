@@ -20,4 +20,7 @@ exclude_asns = [
     60068,  # Datacamp / CDN77 (VPN hosting)
     203020, # HostRoyale (VPN)
     136557, # Host Universal (VPN)
+    59253,  # Leaseweb (VPN)
+    39351,  # Mullvad
+    209103, # Proton
 ]
