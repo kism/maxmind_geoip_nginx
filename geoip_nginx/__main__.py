@@ -4,6 +4,7 @@ import argparse
 import bisect
 import io
 import ipaddress
+import logging
 import os
 import sys
 import tarfile
@@ -14,12 +15,9 @@ from pathlib import Path
 import httpx
 import maxminddb
 from dotenv import load_dotenv
-from rich.console import Console
-from rich.traceback import install as rich_traceback_install
 
-rich_traceback_install()
 load_dotenv()
-console = Console()
+logger = logging.getLogger(__name__)
 
 MAXMIND_ACCOUNT_ID = os.getenv("MAXMIND_ACCOUNT_ID", "")
 MAXMIND_LICENSE_KEY = os.getenv("MAXMIND_LICENSE_KEY", "")
@@ -41,7 +39,7 @@ def download_geolite2_db(edition: str) -> Path:
     """Download a GeoLite2 database (e.g. GeoLite2-Country) if it's missing or outdated, return its path."""
     db_path = DB_DIR / f"{edition}.mmdb"
     if db_path.is_file() and db_path.stat().st_mtime >= (datetime.now() - DB_MAX_AGE).timestamp():
-        console.log(f"{edition} database is up to date at {db_path}. Skipping download.")
+        logger.info("%s database is up to date at %s. Skipping download.", edition, db_path)
         return db_path
 
     if not (MAXMIND_ACCOUNT_ID and MAXMIND_LICENSE_KEY):
@@ -62,7 +60,7 @@ def download_geolite2_db(edition: str) -> Path:
             sys.exit(f"{db_path.name} not found in the downloaded archive.")
         _atomic_write(db_path, db_file.read())
 
-    console.log(f"Downloaded {edition} database to {db_path}.")
+    logger.info("Downloaded %s database to %s.", edition, db_path)
     return db_path
 
 
@@ -97,7 +95,7 @@ def get_asn_networks(db_path: Path, asns: set[int]) -> list[IPNetwork]:
                 found.add(asn)
 
     for asn in sorted(asns - found):
-        console.log(f"[bold yellow]AS{asn} has no networks in the ASN database, typo?[/]")
+        logger.warning("AS%d has no networks in the ASN database, typo?", asn)
     return networks
 
 
@@ -167,29 +165,35 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate GeoIP allowlist for Nginx.")
     parser.add_argument("--output", type=Path, help="Path to save the nginx conf file", default=DEFAULT_OUTPUT_PATH)
     parser.add_argument("--config", type=Path, help="Path to the TOML config", default=DEFAULT_CONFIG_PATH)
+    parser.add_argument("-v", "--verbose", action="store_true", help="Show debug messages")
     args = parser.parse_args()
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
     output_path: Path = args.output
     countries, exclude_asns = load_config(args.config)
     del args  # Stop me using args directly
 
-    console.log(f"Maxmind Account ID: [bold green]{MAXMIND_ACCOUNT_ID}[/]")
-    console.log(f"Maxmind License Key: [bold green]{MAXMIND_LICENSE_KEY[:4] + '*' * (len(MAXMIND_LICENSE_KEY) - 4)}[/]")
-    console.log(f"Output file: [bold green]{output_path}[/]")
-    console.log(f"Allowed countries: [bold green]{', '.join(sorted(countries))}[/]")
-    console.log(f"Excluded ASNs: [bold green]{', '.join(f'AS{a}' for a in sorted(exclude_asns)) or 'none'}[/]")
+    logger.debug("Maxmind Account ID: %s", MAXMIND_ACCOUNT_ID)
+    logger.debug("Maxmind License Key: %s", MAXMIND_LICENSE_KEY[:4] + "*" * (len(MAXMIND_LICENSE_KEY) - 4))
+    logger.info("Output file: %s", output_path)
+    logger.info("Allowed countries: %s", ", ".join(sorted(countries)))
+    logger.info("Excluded ASNs: %s", ", ".join(f"AS{a}" for a in sorted(exclude_asns)) or "none")
 
     networks = get_country_networks(download_geolite2_db("GeoLite2-Country"), countries)
     if exclude_asns:
         excluded = get_asn_networks(download_geolite2_db("GeoLite2-ASN"), exclude_asns)
-        console.log(f"Excluding {len(excluded)} networks from {len(exclude_asns)} ASNs...")
+        logger.info("Excluding %d networks from %d ASNs...", len(excluded), len(exclude_asns))
         networks = subtract_networks(networks, excluded)
 
     # An empty allowlist next to `deny all;` locks everyone out, so never write one
     if not networks:
         sys.exit("No networks found for the given countries. Not writing an empty allowlist.")
 
-    console.log(f"Writing {len(networks)} networks to {output_path}...")
+    logger.info("Writing %d networks to %s...", len(networks), output_path)
     _atomic_write(output_path, "".join(f"{net} 1;\n" for net in networks).encode())
 
 

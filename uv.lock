@@ -129,7 +129,6 @@ dependencies = [
     { name = "dotenv" },
     { name = "httpx" },
     { name = "maxminddb" },
-    { name = "rich" },
 ]
 
 [package.dev-dependencies]
@@ -145,7 +144,6 @@ requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "maxminddb", specifier = ">=3.2.0" },
-    { name = "rich", specifier = ">=15.0.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -212,18 +210,6 @@ wheels = [
 ]
 
 [[package]]
-name = "markdown-it-py"
-version = "4.3.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "mdurl" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/16/fc/cee2c45553c9a9bf77d8b0c391560c556d7ed756b1f0bb35eb5d48db09ea/markdown_it_py-4.3.0.tar.gz", hash = "sha256:91a58fa5b72c71a40cf7177250fd767480d7a2bb3ac426ccfb76fb90305fdaaa", size = 242701, upload-time = "2026-11-10T16:18:30.467Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/c9/31/5f0ac2f1a1c67423c995c731a11cd4ad05d081a2be969d74f868bdb9cc70/markdown_it_py-4.3.0-py3-none-any.whl", hash = "sha256:7aa1511a46c39138de78d9eba92ce47e63124d8003fc98b3a351909e04239efa", size = 96951, upload-time = "2026-11-10T16:18:28.975Z" },
-]
-
-[[package]]
 name = "maxminddb"
 version = "3.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -277,15 +263,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/e2/fa/912db49af2286f445c8f615770f97c7f784b2dcf59faf38013b1a865c158/maxminddb-3.2.0-cp315-cp315t-win32.whl", hash = "sha256:ab8149339150bca72308a9489af9811fc9835cc8146ef23377d1d06bfc8511c9", size = 39057, upload-time = "2026-09-10T22:27:49.231Z" },
     { url = "https://files.pythonhosted.org/packages/f7/14/f995ca5a862bf0437666316a02a55cc5229b1ce219bacb743c5e878f8621/maxminddb-3.2.0-cp315-cp315t-win_amd64.whl", hash = "sha256:7071e40cc14aa953c061c41b976381fe931234909f5cfabfc501922a6a22effe", size = 40812, upload-time = "2026-09-10T22:27:50.379Z" },
     { url = "https://files.pythonhosted.org/packages/43/2b/fe8593ba8d3a6c831fa559281eb4211481c06041b3865b79f2db2110020e/maxminddb-3.2.0-cp315-cp315t-win_arm64.whl", hash = "sha256:ca45310589643b03b40dddc6d0de73792bc85dfc1ada0f44974f6628f44d3d45", size = 37976, upload-time = "2026-09-10T22:27:51.664Z" },
-]
-
-[[package]]
-name = "mdurl"
-version = "0.1.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d6/54/cfe61301667036ec958cb99bd3efefba235e65cdeb9c84d24a8293ba1d90/mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba", size = 8729, upload-time = "2022-08-14T12:40:10.846Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8", size = 9979, upload-time = "2022-08-14T12:40:09.779Z" },
 ]
 
 [[package]]
@@ -352,19 +329,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/74/26/2fbeedb218a787a5eea551c7532cac4e009f83d689dd2faa0d0353473f86/python_dotenv-1.2.4.tar.gz", hash = "sha256:f0d53e69935a851c0dcc78f3ab7aaccd8cabef0b92382b576b824212902873c0", size = 60824, upload-time = "2026-10-01T05:36:10Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/60/d1/38f3a3405989a89ac18390803e70c6ad7c7760da4f9b83cbeca0c44a0c72/python_dotenv-1.2.4-py3-none-any.whl", hash = "sha256:42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc", size = 23266, upload-time = "2026-10-01T05:36:08.633Z" },
-]
-
-[[package]]
-name = "rich"
-version = "15.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "markdown-it-py" },
-    { name = "pygments" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c0/8f/0722ca900cc807c13a6a0c696dacf35430f72e0ec571c4275d2371fca3e9/rich-15.0.0.tar.gz", hash = "sha256:edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36", size = 230680, upload-time = "2026-04-12T08:24:00.75Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/82/3b/64d4899d73f91ba49a8c18a8ff3f0ea8f1c1d75481760df8c68ef5235bf5/rich-15.0.0-py3-none-any.whl", hash = "sha256:33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb", size = 310654, upload-time = "2026-04-12T08:24:02.83Z" },
 ]
 
 [[package]]

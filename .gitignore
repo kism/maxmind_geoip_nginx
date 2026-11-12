@@ -15,3 +15,4 @@ wheels/
 
 # Local config
 config.toml
+.coverage
