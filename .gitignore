@@ -12,3 +12,6 @@ wheels/
 # Virtual environments
 .venv
 .env
+
+# Local config
+config.toml

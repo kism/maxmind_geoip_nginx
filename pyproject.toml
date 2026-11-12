@@ -23,6 +23,8 @@ module-root = ""
 
 [dependency-groups]
 dev = [
+    "pytest>=9.2.0",
+    "pytest-cov>=7.1.0",
     "ruff>=0.17.4",
     "ty>=0.0.100",
 ]
@@ -47,29 +49,6 @@ ignore = [
     "COM812", # KG conflict in the formatter
 ]
 
-[tool.ruff.lint.per-file-ignores]
-"tests/*.py" = [
-    # Modules
-    "ARG", # KG Unused function args -> fixtures nevertheless are functionally relevant
-    "FBT", # KG Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
-    "ANN", # KG Don't care about annotations in tests
-    "D",   # KG Don't care about docstrings in tests
-
-    # Specific rules
-    "S101",    # KG asserts allowed in tests.
-    "SLF001",  # KG Accessing private members is needed for testing.
-    "INP001",  # KG __init__.py not needed for PyTest.
-    "PT004",   # KG monkeypatch doesn't return.
-    "S311",    # KG I'll assume no real crypto will be done in PyTest.
-    "S105",    # KG Hardcoded fake passwords are fine in tests.
-    "PLR0913", # KG Tests can have as many arguments as they want.
-    "BLE001",  # KG Tests can use BaseException.
-]
-
-
-[tool.ruff.lint.flake8-pytest-style]
-fixture-parentheses = false
-
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
@@ -79,15 +58,8 @@ indent-style = "space"
 docstring-code-format = true
 docstring-code-line-length = 40
 
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004", "SLF001", "INP001", "D"] # KG asserts, magic values, private access fine in tests
+
 [tool.pytest.ini_options]
-addopts = [
-    "--cov-context=test",
-    "--cov=my_cool_app",
-    "--cov-report=term",
-    "--cov-report=html",
-]
-testpaths = ["tests"]
-
-[tool.coverage.html]
-show_contexts = true
-
+addopts = "--cov=geoip_nginx --cov-report=term-missing"

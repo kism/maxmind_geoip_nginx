@@ -1,0 +1,23 @@
+# Copy to config.toml (or pass --config). Networks in `countries` are allowed,
+# minus anything announced by `exclude_asns` (look up ASNs at https://bgp.he.net).
+
+countries = ["AU"]
+
+# Hosting / cloud / VPN-exit providers, so scanners and VPNs that geolocate to an allowed country are still blocked.
+exclude_asns = [
+    16509,  # Amazon AWS
+    14618,  # Amazon AWS
+    15169,  # Google
+    396982, # Google Cloud
+    8075,   # Microsoft Azure
+    31898,  # Oracle Cloud
+    14061,  # DigitalOcean
+    20473,  # Vultr
+    63949,  # Linode / Akamai
+    16276,  # OVH
+    24940,  # Hetzner
+    9009,   # M247 (VPN hosting)
+    60068,  # Datacamp / CDN77 (VPN hosting)
+    203020, # HostRoyale (VPN)
+    136557, # Host Universal (VPN)
+]
